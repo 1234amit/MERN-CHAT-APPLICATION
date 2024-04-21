@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
+import { auth, provider } from "./ConfigFirebase";
+import { signInWithPopup } from "firebase/auth";
 
 
 const Login = () => {
@@ -13,6 +15,33 @@ const Login = () => {
         e.preventDefault();
         await login(username, password);
     };
+
+    // code for sign in with google
+    const navigate = useNavigate()
+
+    const handleClick = (e) => {
+        // e.preventDefault();
+        // signInWithPopup(auth, provider)
+        //     .then((res) => {
+        //         console.log(res, "userData")
+        //         navigate('/')
+        //     })
+        //     .catch((err) => {
+        //         console.error(err, "error")
+        //     })
+    }
+
+
+    // useEffect(() => {
+    //     const unsubscribe = auth.onAuthStateChanged((userData) => {
+    //         console.log(userData)
+    //         if (userData?.email) {
+    //             navigate('/')
+    //         }
+    //     })
+    //     return () => unsubscribe()
+    // }, [])
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -65,6 +94,12 @@ const Login = () => {
                         </button>
                     </div>
                 </form>
+
+                <div className="flex justify-center items-center">
+                    <button onClick={handleClick} style={{ backgroundColor: '#DB4437', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                        Sign in with Google
+                    </button>
+                </div>
 
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Don't have an account? <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">Sign up</Link>
