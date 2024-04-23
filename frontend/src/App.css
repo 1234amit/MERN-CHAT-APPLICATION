@@ -3,3 +3,8 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+
+.react-input-emoji--input {
+  width: 576px;
+}
