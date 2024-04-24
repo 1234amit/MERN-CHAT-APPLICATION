@@ -152,10 +152,11 @@ const Message = ({ message }) => {
     const formattedTime = extractTime(message.createdAt);
     const alignRight = fromMe ? "justify-end" : ""; // Adjusted alignment logic
     const profilePic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
-    const bubbleBgColor = fromMe ? "bg-blue-500" : "bg-gray-300"; // Different background colors for sender and receiver
+    const bubbleBgColor = fromMe ? "bg-green-500" : "bg-gray-100"; // Different background colors for sender and receiver
 
     const isFile = message.file;
     const isImage = message.file && /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(message.file);
+    const textColor = fromMe ? "text-white" : "text-black";
 
     const getDownloadFileName = (file) => {
         if (file instanceof File) {
@@ -183,7 +184,7 @@ const Message = ({ message }) => {
                     </div>
                 )}
                 {!isFile && !isImage && (
-                    <p>{message.message}</p>
+                    <p className={textColor}>{message.message}</p>
                 )}
             </div>
             {/* <div className='chat-footer opacity-50 text-xs flex gap-1 items-center'>{formattedTime}</div> */}
