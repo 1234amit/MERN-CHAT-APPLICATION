@@ -10,6 +10,8 @@ import morgan from "morgan";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 import mongoose from "mongoose";
+import fileRouter from './routes/file.routes.js'; // Adjust the path to match your file
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -39,6 +41,7 @@ app.use(morgan('dev'));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
+app.use('/api', fileRouter);
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 

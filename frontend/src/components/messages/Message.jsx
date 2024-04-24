@@ -1,31 +1,48 @@
-import React from 'react'
+import React from 'react';
+import { HiDocumentDownload } from 'react-icons/hi'; // Import file icon
 import useConversation from '../../zustand/useConversation';
 import { useAuthContext } from '../../context/AuthContext';
 import { extractTime } from './../../utils/extractTime';
 
 const Message = ({ message }) => {
     const { authUser } = useAuthContext();
-    const { selectedConversation } = useConversation();
+    // const { selectedConversation } = useConversation();
+    const { selectedConversation, downloadFile } = useConversation();
+
     const fromMe = message.senderId === authUser._id;
     const formattedTime = extractTime(message.createdAt);
     const chatClassName = fromMe ? "chat-end" : "chat-start";
     const profilePic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
     const bubbleBgColor = fromMe ? "bg-blue-500" : "";
+    const isFile = message.file; // Check if message has a file
+    const isImage = message.file && /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(message.file); // Check if file is an image
 
     const shakeClass = message.shouldShake ? "shake" : "";
 
+    // const getFileExtension = (filename) => {
+    //     return filename.split('.').pop().toLowerCase();
+    // };
+
+    // const getDownloadFileName = (filename) => {
+    //     const extension = getFileExtension(filename);
+    //     return `download.${extension}`;
+    // };
+
+    // const getDownloadFileName = (filename) => {
+    //     return filename.split('/').pop(); // Get the filename from the URL
+    // };
+
+    const getDownloadFileName = (file) => {
+        console.log(file);
+        if (file instanceof File) {
+            return file.name; // Extract filename from File object
+        }
+        // Fallback: Extract filename from URL
+        return file.split('/').pop();
+    };
+
+
     return (
-        // <div className={`flex flex-col chat ${chatClassName}`}>
-        //     <div className="flex items-center mb-2">
-        //         <div>
-        //             <img src={profilePic} alt="User A" className="w-8 h-8 rounded-full mr-2" />
-        //         </div>
-        //         <div className="bg-blue-500 text-white p-2 rounded-lg w-[250px]">
-        //             <p>{message.message}</p>
-        //         </div>
-        //         <div className='chat-footer opacity-50 text-xs flex gap-1 items-center'>{formattedTime}</div>
-        //     </div>
-        // </div>
         <div className={`flex flex-col chat ${chatClassName}`}>
             <div className="flex items-center mb-2">
                 {!fromMe && (
@@ -34,8 +51,23 @@ const Message = ({ message }) => {
                     </div>
                 )}
                 <div className={`p-2 rounded-lg max-w-[250px] ${bubbleBgColor}`}>
-                    <p>{message.message}</p>
+                    {isImage && ( // Display image if present
+                        <img src={message.file} alt="Attached Image" className="w-full h-full object-cover rounded-lg" style={{ maxWidth: '250px', maxHeight: '250px' }} />
+                    )}
+                    {isFile && !isImage && ( // Display file if present and not an image
+                        <div className="flex items-center">
+                            <HiDocumentDownload className="w-6 h-6 mr-2" /> {/* File icon */}
+                            <a href={message.file} download={getDownloadFileName(message.file)} className=" text-white">Download File</a>
+                            {/* <button onClick={() => downloadFile(message.file)} className="text-white">Download File</button> */}
+
+
+                        </div>
+                    )}
+                    {!isFile && !isImage && ( // Display message if no file
+                        <p>{message.message}</p>
+                    )}
                 </div>
+
                 <div className='chat-footer opacity-50 text-xs flex gap-1 items-center'>{formattedTime}</div>
                 {fromMe && (
                     <div>
@@ -44,7 +76,7 @@ const Message = ({ message }) => {
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Message
+export default Message;

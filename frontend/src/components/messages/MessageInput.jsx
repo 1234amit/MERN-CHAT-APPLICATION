@@ -27,25 +27,19 @@ const MessageInput = () => {
         fileRef.current.click();
     }
 
-    // function fileSlected(e) {
-    //     console.log(e.target.files);
-    //     const file = e.target.files[0];
-    //     if (!file) return
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    // }
     function fileSelected(e) {
         console.log(e.target.files);
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            setImg({
-                file: file,
-                url: event.target.result, // Data URL
-            });
-        };
-        reader.readAsDataURL(file);
+        // const reader = new FileReader();
+        // reader.onload = (event) => {
+        //     setImg({
+        //         file: file,
+        //         url: event.target.result, // Data URL
+        //     });
+        // };
+        // reader.readAsDataURL(file);
+        setFile(file);
     }
 
 
@@ -57,21 +51,10 @@ const MessageInput = () => {
         setFile(selectedFile);
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     // Combine text message and emoji message
-    //     const combinedMessage = message + newMessage;
-    //     // Ensure message field is present
-    //     await sendMessage(combinedMessage, file);
-    //     setMessage("");
-    //     setNewMessage(""); // Clear emoji message after sending
-    //     setFile(null);
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const combinedMessage = message + newMessage;
-        await sendMessage(combinedMessage, img.file);
+        await sendMessage(combinedMessage, file);
         setMessage("");
         setNewMessage("");
         setFile(null);
@@ -123,7 +106,14 @@ const MessageInput = () => {
                     />
                 </div> */}
 
+                {file && (
+                    <div className="absolute right-[70px] bottom-[6px] flex items-center">
+                        <img src={URL.createObjectURL(file)} alt="Selected File" style={{ height: '30px', width: 'auto' }} />
+                    </div>
+                )}
+
                 <div className="absolute right-[100px] bottom-[-5px] flex items-center" style={{ width: 'calc(100% - 86px)' }}>
+
                     <InputEmoji
                         value={newMessage}
                         onChange={handleChange}
@@ -135,6 +125,7 @@ const MessageInput = () => {
                     />
                 </div>
                 {/* emoji section end here */}
+
 
 
                 {/* end image shareing */}

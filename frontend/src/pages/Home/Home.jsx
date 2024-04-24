@@ -45,7 +45,7 @@ const Home = () => {
                 <div className="p-3 border border-gray-300 rounded-lg flex justify-center">
                     <Link to='/chatPage'>
                         <div className="grid grid-cols-1 sm:grid-cols-1">
-                            <div className="">
+                            <div className="h-[300px] overflow-y-auto">
                                 <Sidebar />
                             </div>
                         </div>
